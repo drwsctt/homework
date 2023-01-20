@@ -1,0 +1,15 @@
+input:
+  http_server: {}
+pipeline:
+  processors:
+    - cache:
+        resource: mycache
+        operator: get
+        key: '${! content() }'
+    - catch:
+      - log:
+          level: ERROR
+          message: "Key does not exist."
+    - mapping: root = content()
+output:
+  sync_response: {}

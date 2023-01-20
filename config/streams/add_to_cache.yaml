@@ -1,0 +1,20 @@
+input:
+  http_server: {}
+pipeline:
+  processors:
+    - mapping: |
+        foo.payload = content()
+        foo.uuid = timestamp_unix_nano()
+    - cache:
+        resource: mycache
+        operator: add
+        key: '${! foo.uuid }'
+        value: '${! foo.payload }'
+    - mapping:
+        root = if errored() {
+          deleted()
+        } else {
+          foo.uuid
+        }
+output:
+  sync_response: {}

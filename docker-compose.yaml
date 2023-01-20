@@ -1,0 +1,19 @@
+version: "3.9"
+services:
+  benthos:
+    image: jeffail/benthos
+    volumes:
+      - ./config:/config
+    ports:
+      - "4195:4195"
+    command:
+      - "-c"
+      - "/config/config.yaml"
+      - "-r"
+      - "/config/resources/*.yaml"
+      - "streams"
+      - "/config/streams/*.yaml"
+  redis:
+    image: "redis"
+    ports:
+      - "6379:6379"
